@@ -13,7 +13,15 @@ def find_abspath(dir, substr):
     for ifile in files:
         if substr in ifile:
             return join(dir, ifile)
-    raise ValueError("substr does not exist in all strs")
+    return None
+    
+def none_concatenate(array_list):
+    if array_list[0] is None:
+        return array_list[1]
+    elif array_list[1] is None:
+        return array_list[0]
+    return np.concatenate(array_list, 0)
+        
 
 class DataSet(object):
     """Provide cross-validation dataset for spam/nonspam
@@ -48,20 +56,26 @@ class DataSet(object):
             DataSet.read_datfile(test_dir)
         self._orig_numtrains = train_numspams + train_numnospams
         self._orig_numtests  = test_numspams  + test_numnospams
-        self._bagofwords = np.concatenate((train_bagofwords, test_bagofwords),0)
+        self._bagofwords = none_concatenate((train_bagofwords, test_bagofwords))
         
         train_labels_file = find_abspath(train_dir, 'classes')
         test_labels_file  = find_abspath(test_dir,  'classes')
         
-        train_labels = pd.read_csv(train_labels_file, header=None, true_values=['Spam'], false_values=['NotSpam'])[0]
-        train_labels = np.array(train_labels).astype(int)
+        if train_labels_file is not None:
+            train_labels = pd.read_csv(train_labels_file, header=None, true_values=['Spam'], false_values=['NotSpam'])[0]
+            train_labels = np.array(train_labels).astype(int)
+        else:
+            train_labels = None
         
-        test_labels  = pd.read_csv(test_labels_file, header=None, true_values=['Spam'], false_values=['NotSpam'])[0]
-        test_labels  = np.array(test_labels).astype(int)
+        if test_labels_file is not None:
+            test_labels  = pd.read_csv(test_labels_file, header=None, true_values=['Spam'], false_values=['NotSpam'])[0]
+            test_labels  = np.array(test_labels).astype(int)
+        else:
+            test_labels = None
         
-        self._labels = np.concatenate((train_labels, test_labels), 0)
+        self._labels = none_concatenate((train_labels, test_labels))
         
-        vocab_file = find_abspath(train_dir, 'vocab')
+        vocab_file = find_abspath(test_dir, 'vocab')
         vocabs = pd.read_csv(vocab_file, header=None, index_col=False)[0]
         self.vocabs = np.array(vocabs)
         
@@ -194,7 +208,8 @@ class DataSet(object):
             (bagofwords, numspams, numnospams)
         """
         datfile = find_abspath(datfile_dir, 'bag_of_words')
-        
+        if datfile is None:
+            return None, 0, 0
         #find out how many spam and nospam emails in Train
         spam_file   = find_abspath(datfile_dir, 'Spam')
         nospam_file = find_abspath(datfile_dir, 'NotSpam')
