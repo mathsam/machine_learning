@@ -8,22 +8,21 @@ sys.path.append('/home/junyic/Work/Courses/4th_year/DataSci/project1/src')
 import spam_database
 
 archive_dir = '/home/junyic/Work/Courses/4th_year/DataSci/project1/trec07p_data/'
-dataset_small = spam_database.DataSet(archive_dir, 5, True)
-dataset_large = spam_database.DataSet('/home/junyic/Work/Courses/4th_year/DataSci/project1/old_data/P1Data', 1, False)
+dataset_small = spam_database.DataSet(archive_dir, 1, False)
+#dataset_large = spam_database.DataSet('/home/junyic/Work/Courses/4th_year/DataSci/project1/old_data/P1Data', 1, False)
 
 import sklearn.naive_bayes as naive_bayes
 bnb = naive_bayes.BernoulliNB()
 #gnb  = naive_bayes.GaussianNB()
-cross_validation_id = 1
-spam_filter = bnb.fit(np.sign(dataset_small.get_train_features(cross_validation_id)), 
-                      dataset_small.get_train_labels(cross_validation_id))
+spam_filter = bnb.fit(np.sign(dataset_small.get_train_features()), 
+                      dataset_small.get_train_labels())
 #spam_filter = gnb.fit(train_words, labels)
 
-#spam_pred = spam_filter.predict(dataset_small.get_test_features(cross_validation_id))
-spam_pred = spam_filter.predict(dataset_large.get_test_features(cross_validation_id))
+spam_pred = spam_filter.predict(dataset_small.get_test_features())
+#spam_pred = spam_filter.predict(dataset_large.get_test_features(cross_validation_id))
 ##
-#pred_rate = float(np.sum(spam_pred == dataset_small.get_test_labels(cross_validation_id), 0))/float(dataset_small.num_tests)
-pred_rate = float(np.sum(spam_pred == dataset_large.get_test_labels(cross_validation_id), 0))/float(dataset_small.num_tests)
+pred_rate = float(np.sum(spam_pred == dataset_small.get_test_labels(), 0))/float(dataset_small.num_tests)
+#pred_rate = float(np.sum(spam_pred == dataset_large.get_test_labels(cross_validation_id), 0))/float(dataset_small.num_tests)
 print pred_rate
 
 ## find out which words contributes most to spam detection
