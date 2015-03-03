@@ -21,7 +21,7 @@ from sklearn import svm
 train_features = dataset_small.get_train_features()
 train_labels   = dataset_small.get_train_labels()
 
-do_feature_selection = False
+do_feature_selection = True
 
 if do_feature_selection:
     kbestfilter = SelectKBest(chi2, k=500)
@@ -41,4 +41,4 @@ fpr, tpr, thresholds = roc_curve(dataset_small.get_test_labels(),
                                  spam_probs, pos_label=1)
 ## save ROC                                 
 npsave_dir = '/home/junyic/Work/Courses/4th_year/DataSci/project1/'
-np.savez(npsave_dir + 'SVC', tpr, fpr)
+np.savez(npsave_dir + 'NBB_feature_select', tpr, fpr)
