@@ -6,13 +6,13 @@ from sklearn.metrics import mean_squared_error
 valid_test_samples = ~np.isnan(test_Y)
 y_true = test_Y[valid_test_samples]
 y_pred = predicted_Y[valid_test_samples]
-print "r2 = %f" %np.sqrt(r2_score(y_true, y_pred))
+print "r2 = %f" %r2_score(y_true, y_pred)
 #print "explained variance is %f" %explained_variance_score(y_true, y_pred)
-print "MSE = %f" %np.sqrt(mean_squared_error(y_true, y_pred))
+print "SMSE = %f" %np.sqrt(mean_squared_error(y_true, y_pred))
 
 ## evaulate classification performance
 import sklearn.metrics
-cutoff_level = 0.7
+cutoff_level = 0.5
 ylabel_pred = y_pred > cutoff_level
 ylabel_true = y_true > cutoff_level
 report = sklearn.metrics.classification_report(ylabel_true, ylabel_pred)

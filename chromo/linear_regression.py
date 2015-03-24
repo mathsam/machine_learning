@@ -31,7 +31,7 @@ pred_score = clf.score(test_X[valid_test_samples,:], test_Y[valid_test_samples])
 import scipy.stats
 valid_train_samples = ~np.isnan(train_Y)
 start_time = time.time()
-num_tests = 10
+num_tests = 1
 for i in range(num_tests):
     clf.fit(np.log(1.-train_X[valid_train_samples,:]), 
             np.log(1.-train_Y[valid_train_samples]))
@@ -41,5 +41,3 @@ for i in range(num_tests):
     predicted_Y = 1. - np.exp(predicted_log1mY)
 end_time = time.time()
 print "predition time %f" %((end_time - start_time)/num_tests)
-pred_score = scipy.stats.pearsonr(predicted_Y[valid_test_samples], test_Y[valid_test_samples])[0]
-print pred_score
