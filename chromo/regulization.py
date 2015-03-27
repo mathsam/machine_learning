@@ -2,7 +2,7 @@
 ## ridge regression
 from sklearn import linear_model
 start_time = time.time()
-num_tests = 10
+
 for i in range(num_tests):
     clf = linear_model.RidgeCV(alphas=[i/100.0 for i in range(1, 100)])
     
@@ -17,10 +17,11 @@ print "predition time %f" %((end_time - start_time)/num_tests)
 
 print "alpha = %f" %clf.alpha_
 
+ridge_coef = clf.coef_.copy()
+
 ## Lasso BIC
 from sklearn.linear_model import LassoCV, LassoLarsCV, LassoLarsIC
 
-num_tests = 10
 start_time = time.time()
 for i in range(num_tests):
     model_bic = LassoLarsIC(criterion='bic')
@@ -30,8 +31,10 @@ for i in range(num_tests):
 
 end_time = time.time()
 print "predition time %f" %((end_time - start_time)/num_tests)
+
+lassobic_coef = model_bic.coef_.copy()
 ## Lasso AIC
-num_tests = 10
+
 start_time = time.time()
 for i in range(num_tests):
     model_aic = LassoLarsIC(criterion='aic')
@@ -40,6 +43,8 @@ for i in range(num_tests):
 
 end_time = time.time()
 print "predition time %f" %((end_time - start_time)/num_tests)
+
+lassoaic_coef = model_aic.coef_.copy()
 ##
 plt.figure()
 plot_ic_criterion(model_aic, 'AIC', 'b')
@@ -59,7 +64,6 @@ def plot_ic_criterion(model, name, color):
     plt.ylabel('criterion')
     
 ## Lasso CV
-num_tests = 10
 start_time = time.time()
 for i in range(num_tests):
     model = LassoCV(cv=20, eps=1e-6)
@@ -68,6 +72,8 @@ for i in range(num_tests):
     
 end_time = time.time()
 print "predition time %f" %((end_time - start_time)/num_tests)
+
+lasscv_coef = model.coef_.copy()
 ##
 plt.semilogx(model.alphas_, model.mse_path_, ':')
 plt.semilogx(model.alphas_, model.mse_path_.mean(axis=-1), 'k',

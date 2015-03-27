@@ -15,7 +15,7 @@ from sklearn import linear_model
 import time
 
 start_time = time.time()
-num_tests = 10
+num_tests = 1
 for i in range(num_tests):
     clf = linear_model.LinearRegression()
     valid_train_samples = ~np.isnan(train_Y)
@@ -26,6 +26,8 @@ for i in range(num_tests):
 end_time = time.time()
 print "predition time %f" %((end_time - start_time)/num_tests)
 pred_score = clf.score(test_X[valid_test_samples,:], test_Y[valid_test_samples])
+
+olr_coeff = clf.coef_.copy()
 
 ## OLR but using log(1-X) to predict log(1-Y)
 import scipy.stats
