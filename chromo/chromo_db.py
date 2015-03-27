@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class ChromoData(object):
-    _data_path = '/home/junyic/Work/Courses/4th_year/DataSci/project2/data/data'
+    _data_path = './data/data'
     
     def __init__(self, chromonum):
         if not isinstance(chromonum, int):
@@ -40,15 +40,15 @@ class ChromoData(object):
         try:
             return self.__dict__[missing_X_mode + str(include_strand)].copy()
         except KeyError:
-            train_pd = pd.read_csv(os.path.join(ChromoData._data_path,
+            self.train_pd = pd.read_csv(os.path.join(ChromoData._data_path,
                                                 self.trainfile),
                                 sep='\t', header=None,
                                 true_values=['-'], false_values=['+'])
             if include_strand:
-                train_np = np.array(train_pd.iloc[:, 3:-1]).astype(float) 
+                train_np = np.array(self.train_pd.iloc[:, 3:-1]).astype(float) 
                 #last column is whether presented in 450k chip
             else:
-                train_np = np.array(train_pd.iloc[:, 4:-1]).astype(float)
+                train_np = np.array(self.train_pd.iloc[:, 4:-1]).astype(float)
             if missing_X_mode == 'raw':
                 self.__dict__[missing_X_mode + str(include_strand)] = train_np
                 return train_np.copy()
@@ -91,3 +91,33 @@ class ChromoData(object):
                                  sep='\t', header=None)
         test_Y_np = np.array(test_Y_pd.iloc[:,4])
         return test_Y_np[self._which_to_predict]
+
+class FeatureExtend(ChromoData):
+    
+    def __init__(self, chromonum):
+        ChromoData.__init__(self, chromonum)
+
+    def train_X_Extend(self, missing_X_mode='raw', include_strand=False, extend_mode='neighbour'):
+        """
+        Extend the features for trainning
+        main features are inherited from Class ChromoData 
+        
+        Args:
+            extend_mode: neighbour|distance|neighbour_distance
+                whether or not include neighbouring sites, distance in the features 
+	"""
+
+	train_X_normal = self.train_X(missing_X_mode, include_strand)
+	self.up_stream = train_X_normal[:-2]
+	self.dw_stream = train_X_normal[2:]
+	self.distance = np.array(self.train_pd.iloc[1:,1])-np.array(self.train_pd.iloc[:-1,1])
+
+        if extend_mode == 'neighbour':
+	    return np.column_stack([self.up_stream, train_X_normal[1:-1], self.dw_stream])
+
+        if extend_mode == 'distance':
+	    return np.column_stack([self.distance[:-1], train_X_normal[1:-1], self.distance[1:]])
+
+        if extend_mode == 'neighbour_distance':
+	    return np.column_stack([self.up_stream, self.distance[:-1], train_X_normal[1:-1], self.distance[1:], self.dw_stream])
+
