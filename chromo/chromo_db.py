@@ -97,7 +97,7 @@ class FeatureExtend(ChromoData):
     def __init__(self, chromonum):
         ChromoData.__init__(self, chromonum)
 
-    def train_X_Extend(self, missing_X_mode='raw', include_strand=False, extend_mode='neighbour'):
+    def train_X_extend(self, missing_X_mode='raw', include_strand=False, extend_mode='neighbour'):
         """
         Extend the features for trainning
         main features are inherited from Class ChromoData 
@@ -120,3 +120,7 @@ class FeatureExtend(ChromoData):
         if extend_mode == 'neighbour_distance':
             return np.column_stack([self.up_stream, self.distance[:-1], train_X_normal[1:-1], self.distance[1:], self.dw_stream])
 
+    def test_X_extend(self, missing_X_mode='raw', include_strand=False, extend_mode='neighbour'):
+        train_X_extend = self.train_X_extend(missing_X_mode, include_strand, extend_mode)
+	print self._which_to_predict.shape
+	return train_X_extend[self._which_to_predict[1:-1],:]
