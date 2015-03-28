@@ -122,5 +122,4 @@ class FeatureExtend(ChromoData):
 
     def test_X_extend(self, missing_X_mode='raw', include_strand=False, extend_mode='neighbour'):
         train_X_extend = self.train_X_extend(missing_X_mode, include_strand, extend_mode)
-	print self._which_to_predict.shape
-	return train_X_extend[self._which_to_predict[1:-1],:]
+        return train_X_extend[self._which_to_predict[1:-1],:]
