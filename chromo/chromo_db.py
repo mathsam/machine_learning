@@ -104,20 +104,20 @@ class FeatureExtend(ChromoData):
         
         Args:
             extend_mode: neighbour|distance|neighbour_distance
-                whether or not include neighbouring sites, distance in the features 
-	"""
-
-	train_X_normal = self.train_X(missing_X_mode, include_strand)
-	self.up_stream = train_X_normal[:-2]
-	self.dw_stream = train_X_normal[2:]
-	self.distance = np.array(self.train_pd.iloc[1:,1])-np.array(self.train_pd.iloc[:-1,1])
+                         whether or not include neighbouring sites, distance in the features
+        """
+	
+        train_X_normal = self.train_X(missing_X_mode, include_strand)
+        self.up_stream = train_X_normal[:-2]
+        self.dw_stream = train_X_normal[2:]
+        self.distance = np.array(self.train_pd.iloc[1:,1])-np.array(self.train_pd.iloc[:-1,1])
 
         if extend_mode == 'neighbour':
-	    return np.column_stack([self.up_stream, train_X_normal[1:-1], self.dw_stream])
+            return np.column_stack([self.up_stream, train_X_normal[1:-1], self.dw_stream])
 
         if extend_mode == 'distance':
-	    return np.column_stack([self.distance[:-1], train_X_normal[1:-1], self.distance[1:]])
+            return np.column_stack([self.distance[:-1], train_X_normal[1:-1], self.distance[1:]])
 
         if extend_mode == 'neighbour_distance':
-	    return np.column_stack([self.up_stream, self.distance[:-1], train_X_normal[1:-1], self.distance[1:], self.dw_stream])
+            return np.column_stack([self.up_stream, self.distance[:-1], train_X_normal[1:-1], self.distance[1:], self.dw_stream])
 
