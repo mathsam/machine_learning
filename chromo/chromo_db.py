@@ -106,7 +106,6 @@ class FeatureExtend(ChromoData):
             extend_mode: neighbour|distance|neighbour_distance
                          whether or not include neighbouring sites, distance in the features
         """
-	
         train_X_normal = self.train_X(missing_X_mode, include_strand)
         self.up_stream = train_X_normal[:-2]
         self.dw_stream = train_X_normal[2:]
