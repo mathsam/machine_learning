@@ -1,13 +1,20 @@
 # linear regression
-
-## prepare X, Y
 import chromo_db
 chrome_num = 1
+## prepare X, Y
 db = chromo_db.ChromoData(chrome_num)
-train_X = db.train_X(missing_X_mode='neighbors_ave')
+train_X = db.train_X(missing_X_mode='neighbors_ave', include_strand=True)
 train_Y = db.train_Y()
 
-test_X = db.test_X(missing_X_mode='neighbors_ave')
+test_X = db.test_X(missing_X_mode='neighbors_ave', include_strand=True)
+test_Y = db.test_Y()
+
+## prepare X, Y using extended features
+db = chromo_db.FeatureExtend(chrome_num)
+train_X = db.train_X_extend(missing_X_mode='neighbors_ave', extend_mode='neighbour')
+train_Y = db.train_Y()
+
+test_X = db.test_X_extend(missing_X_mode='neighbors_ave', extend_mode='neighbour')
 test_Y = db.test_Y()
 
 ## Ordinary linear regression
