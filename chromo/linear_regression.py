@@ -3,6 +3,7 @@ import chromo_db
 chrome_num = 1
 ## prepare X, Y
 db = chromo_db.ChromoData(chrome_num)
+##
 train_X = db.train_X(missing_X_mode='neighbors_ave', include_strand=True)
 train_Y = db.train_Y()
 
