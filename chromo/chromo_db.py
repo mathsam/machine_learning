@@ -123,3 +123,9 @@ class FeatureExtend(ChromoData):
     def test_X_extend(self, missing_X_mode='raw', include_strand=False, extend_mode='neighbour'):
         train_X_extend = self.train_X_extend(missing_X_mode, include_strand, extend_mode)
         return train_X_extend[self._which_to_predict[1:-1],:]
+
+    def train_Y_extend(self):
+        return self.train_Y()[1:-1]
+
+    def test_Y_extend(self):
+        return self.test_Y()[1:-1]
