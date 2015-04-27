@@ -4,10 +4,10 @@ chrome_num = 1
 ## prepare X, Y
 db = chromo_db.ChromoData(chrome_num)
 ##
-train_X = db.train_X(missing_X_mode='neighbors_ave', include_strand=True)
+train_X = db.train_X(missing_X_mode='neighbors_ave', include_strand=False)
 train_Y = db.train_Y()
 
-test_X = db.test_X(missing_X_mode='neighbors_ave', include_strand=True)
+test_X = db.test_X(missing_X_mode='neighbors_ave', include_strand=False)
 test_Y = db.test_Y()
 
 ## prepare X, Y using extended features

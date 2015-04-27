@@ -1,5 +1,5 @@
 from sklearn import gaussian_process
-gp = gaussian_process.GaussianProcess(storage_mode='full')
+gp = gaussian_process.GaussianProcess(storage_mode='full', corr='linear')
 
 
 import time
