@@ -30,9 +30,17 @@ prank = graph_tool.centrality.pagerank(g)
 prank_np = np.zeros(444075)
 for i in range(0, 444075):
     prank_np[i] = prank[vertices[i]]
+
+##
+component_num = 2
+valid_index = np.logical_and(num_outbounds>0, V[component_num,:]>0)
+r = pearsonr(np.log(num_outbounds[valid_index]), np.log(V[component_num,valid_index]))
+rand_indx = np.random.randint(0, 444075, 2000)
+plt.scatter(np.log(num_outbounds[rand_indx]), np.log(V[1,rand_indx]))
+plt.show()
     
 ## starts from one nodes and draw a tree with it to be root
-"""
+"""np.
 outbounds = {}
 for i in range(0, btc_train_np.shape[0]):
     current_k = btc_train_np[i,0]

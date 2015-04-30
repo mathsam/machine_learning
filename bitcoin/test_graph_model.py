@@ -18,6 +18,16 @@ for i in range(num_tests):
     distance[i] = graph_tool.topology.shortest_distance(g, 
         source=vertices[i_indx], target=vertices[j_indx])
 
+## use maximum flow
+max_flow = np.zeros(num_tests)
+for i in range(num_tests):
+    print i
+    i_indx = btc_test_np[i,0]
+    j_indx = btc_test_np[i,1]
+    res = gt.edmonds_karp_max_flow(g, vertices[i_indx], vertices[j_indx], cap)
+    res.a = cap.a - res.a
+    max_flow[i] = sum(res[e] for e in vertices[j_indx].in_edges())
+
 ## use product of page rank
 
 for i in range(num_tests):
